@@ -1,6 +1,279 @@
+{% doc %}
+  @prompt
+    i add metafield name custom.jinga_lala i wana show here like name:value
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-metafield-display-{{ ai_gen_id }} {
+    padding: {{ block.settings.padding }}px;
+    background-color: {{ block.settings.background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+    text-align: {{ block.settings.text_alignment }};
+  }
+
+  .ai-metafield-display__container-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: {{ block.settings.layout }};
+    gap: {{ block.settings.gap }}px;
+    align-items: center;
+    justify-content: {{ block.settings.text_alignment }};
+  }
+
+  .ai-metafield-display__name-{{ ai_gen_id }} {
+    font-size: {{ block.settings.name_font_size }}px;
+    font-weight: {{ block.settings.name_font_weight }};
+    color: {{ block.settings.name_color }};
+    margin: 0;
+  }
+
+  .ai-metafield-display__separator-{{ ai_gen_id }} {
+    font-size: {{ block.settings.name_font_size }}px;
+    color: {{ block.settings.separator_color }};
+  }
+
+  .ai-metafield-display__value-{{ ai_gen_id }} {
+    font-size: {{ block.settings.value_font_size }}px;
+    font-weight: {{ block.settings.value_font_weight }};
+    color: {{ block.settings.value_color }};
+    margin: 0;
+  }
+
+  .ai-metafield-display__empty-{{ ai_gen_id }} {
+    font-size: 14px;
+    color: #999;
+    font-style: italic;
+    padding: 20px;
+  }
+{% endstyle %}
+
+<div class="ai-metafield-display-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  {% if product.metafields.custom.jinga_lala != blank %}
+    <div class="ai-metafield-display__container-{{ ai_gen_id }}">
+      {% if block.settings.show_name %}
+        <span class="ai-metafield-display__name-{{ ai_gen_id }}">
+          {{ block.settings.custom_name }}
+        </span>
+        <span class="ai-metafield-display__separator-{{ ai_gen_id }}">
+          {{ block.settings.separator }}
+        </span>
+      {% endif %}
+      <span class="ai-metafield-display__value-{{ ai_gen_id }}">
+        {{ product.metafields.custom.jinga_lala }}
+      </span>
+    </div>
+  {% else %}
+    <div class="ai-metafield-display__empty-{{ ai_gen_id }}">
+      No metafield value found for custom.jinga_lala
+    </div>
+  {% endif %}
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Metafield display",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_name",
+      "label": "Show name",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "custom_name",
+      "label": "Name",
+      "default": "jinga_lala"
+    },
+    {
+      "type": "text",
+      "id": "separator",
+      "label": "Separator",
+      "default": ":"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout",
+      "options": [
+        {
+          "value": "row",
+          "label": "Horizontal"
+        },
+        {
+          "value": "column",
+          "label": "Vertical"
+        }
+      ],
+      "default": "row"
+    },
+    {
+      "type": "select",
+      "id": "text_alignment",
+      "label": "Alignment",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Gap",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "label": "Border radius",
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Name style"
+    },
+    {
+      "type": "range",
+      "id": "name_font_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "name_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "name_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Value style"
+    },
+    {
+      "type": "range",
+      "id": "value_font_size",
+      "min": 10,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "label": "Font size",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "value_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semibold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "color",
+      "id": "value_color",
+      "label": "Color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background",
+      "default": "#f5f5f5"
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator",
+      "default": "#000000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Metafield display"
+    }
+  ]
+}
 {% endschema %}
